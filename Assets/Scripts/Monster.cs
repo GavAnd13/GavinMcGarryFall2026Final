@@ -18,25 +18,27 @@ public class Monster : MonoBehaviour
     {
         if (hunting)
         {
-            Vector3 direction = new Vector3(player.transform.position.x - transform.position.x, transform.position.y, player.transform.position.z - transform.position.z);
-            transform.LookAt(direction);
+            Vector3 direction = player.transform.position - transform.position;
+            direction.y = 0;
+            transform.LookAt(player.transform.position);
             direction.Normalize();
             float scaledChaseSpeed = chaseSpeed * Time.deltaTime;
-            transform.position += direction * chaseSpeed;
+            transform.position += direction * scaledChaseSpeed;
+            atRandomPoint = true;
         }
         else
         {
             if (atRandomPoint)
             {
-                Debug.Log(randomPoint);
                 Vector2 randomCircle = Random.insideUnitCircle * wanderRadius;
                 randomPoint = new Vector3(transform.position.x + randomCircle.x, transform.position.y, transform.position.z + randomCircle.y);
+                atRandomPoint = false;
             }
             else
             {
-                Debug.Log(randomPoint);
                 transform.LookAt(randomPoint);
-                Vector3 unitRandomPoint = randomPoint;
+
+                Vector3 unitRandomPoint = randomPoint - transform.position;
                 unitRandomPoint.Normalize();
                 float scaledWanderSpeed = wanderSpeed * Time.deltaTime;
                 transform.position += unitRandomPoint * scaledWanderSpeed;
