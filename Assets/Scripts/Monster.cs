@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class Monster : MonoBehaviour
 {
     public GameObject player;
+    public AudioSource monsterAudio;
     public float chaseSpeed = 1.5f;
     public float wanderSpeed = .5f;
     public float wanderRadius = 5f;
@@ -24,7 +25,10 @@ public class Monster : MonoBehaviour
             direction.Normalize();
             float scaledChaseSpeed = chaseSpeed * Time.deltaTime;
             transform.position += direction * scaledChaseSpeed;
+
             atRandomPoint = true;
+            if (!monsterAudio.isPlaying)
+                monsterAudio.Play();
         }
         else
         {
@@ -47,6 +51,8 @@ public class Monster : MonoBehaviour
                     atRandomPoint = true;
                 }
             }
+            if (monsterAudio.isPlaying)
+                monsterAudio.Stop();
         }
     }
 
